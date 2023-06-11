@@ -8,8 +8,11 @@ class LoginRequested extends AuthEvent {
   final String password;
   final BuildContext context;
 
-  LoginRequested(
-      {required this.email, required this.password, required this.context,});
+  LoginRequested({
+    required this.email,
+    required this.password,
+    required this.context,
+  });
 }
 
 class RegisterRequested extends AuthEvent {
@@ -17,6 +20,11 @@ class RegisterRequested extends AuthEvent {
   final String password;
   final BuildContext context;
 
-  RegisterRequested(
-      {required this.email, required this.password, required this.context,});
+  RegisterRequested({
+    required this.email,
+    required this.password,
+    required this.context,
+  });
 }
+
+class CheckIfSignedIn extends AuthEvent {}
