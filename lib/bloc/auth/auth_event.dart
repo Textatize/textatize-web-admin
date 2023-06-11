@@ -28,3 +28,5 @@ class RegisterRequested extends AuthEvent {
 }
 
 class CheckIfSignedIn extends AuthEvent {}
+
+class SignOut extends AuthEvent {}
