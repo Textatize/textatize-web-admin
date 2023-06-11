@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (context, state) {
         return const Scaffold(
           body: Center(
-            child: Text("Register Screen"),
+            child: Text("Login Screen"),
           ),
         );
       },

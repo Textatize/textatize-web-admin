@@ -32,8 +32,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<CheckIfSignedIn>((event, emit) async {
       try {
         emit(Authenticating());
-
-        emit(Authenticated());
+        await Future.delayed(const Duration(seconds: 2, milliseconds: 500));
+        emit(UnAuthenticated());
       } catch (e) {
         emit(UnAuthenticated());
       }

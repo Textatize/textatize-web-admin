@@ -26,26 +26,29 @@ class SplashScreen extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return const Scaffold(
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  "Textatize Admin",
-                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+        return Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    "logo_large.png",
+                    width: 256,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: CircularProgressIndicator(),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

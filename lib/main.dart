@@ -1,8 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
-import "package:textatize_admin/ui/home/home_screen.dart";
+import "package:textatize_admin/ui/auth/splash_screen.dart";
 import "package:url_strategy/url_strategy.dart";
-
 import "bloc/auth/auth_bloc.dart";
 import "bloc/home/home_bloc.dart";
 
@@ -27,6 +26,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: "Textatize Admin",
         theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch().copyWith(
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           ),
           useMaterial3: true,
         ),
-        home: const HomeScreen(),
+        home: const SplashScreen(),
       ),
     );
   }
