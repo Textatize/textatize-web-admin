@@ -1,5 +1,6 @@
 import "package:bloc/bloc.dart";
 import "package:flutter/cupertino.dart";
+import "package:textatize_admin/api/api.dart";
 import "package:textatize_admin/ui/universal/popups/error_dialog.dart";
 
 part "auth_event.dart";
@@ -12,6 +13,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         emit(Authenticating());
 
+        if (event.remember) {
+          await TextatizeApi().storage.write(key: "remember", value: "true");
+        }
         emit(Authenticated());
       } catch (e) {
         errorDialog(event.context, e.toString());
@@ -22,6 +26,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         emit(Authenticating());
 
+        if (event.remember) {
+          await TextatizeApi().storage.write(key: "remember", value: "true");
+        }
         emit(Authenticated());
       } catch (e) {
         errorDialog(event.context, e.toString());
@@ -30,21 +37,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     on<CheckIfSignedIn>((event, emit) async {
-      try {
-        emit(Authenticating());
-        await Future.delayed(const Duration(seconds: 2, milliseconds: 500));
-        emit(UnAuthenticated());
-      } catch (e) {
-        emit(UnAuthenticated());
+      emit(Authenticating());
+      if (await TextatizeApi().storage.read(key: "token") != null &&
+          await TextatizeApi().storage.read(key: "remember") != null) {
+        try {
+          await TextatizeApi().reAuth();
+          emit(Authenticated());
+        } catch (_) {
+          emit(UnAuthenticated());
+        }
       }
+      emit(UnAuthenticated());
     });
 
     on<SignOut>((event, emit) async {
-      try {
-        emit(UnAuthenticated());
-      } catch (e) {
-        emit(UnAuthenticated());
-      }
+      await TextatizeApi().storage.deleteAll();
+      emit(UnAuthenticated());
     });
   }
 }

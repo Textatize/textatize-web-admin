@@ -11,7 +11,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<GetHome>((event, emit) async {
       try {
         emit(HomeLoading());
-
+        await Future.delayed(const Duration(seconds: 2, milliseconds: 500));
         emit(HomeLoaded());
       } catch (e) {
         errorDialog(event.context, e.toString());
