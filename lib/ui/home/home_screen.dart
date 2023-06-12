@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
+import "package:textatize_admin/bloc/auth/auth_bloc.dart";
 import "package:textatize_admin/bloc/home/home_bloc.dart";
+import "package:textatize_admin/ui/auth/login_screen.dart";
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -44,8 +46,28 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         }
-        return const Scaffold(
-          body: Center(
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              "Textatize Admin",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
+            ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton(
+                  tooltip: "Sign Out",
+                    onPressed: () {
+                      context.read<AuthBloc>().add(SignOut());
+                      context.read<HomeBloc>().add(ResetHome());
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => const LoginScreen()),);
+                    },
+                    icon: const Icon(Icons.logout),),
+              )
+            ],
+          ),
+          body: const Center(
             child: Text(
               "Home Screen",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),

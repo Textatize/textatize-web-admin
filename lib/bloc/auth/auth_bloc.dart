@@ -25,7 +25,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginRequested>((event, emit) async {
       try {
         emit(Authenticating());
-
         if (event.remember) {
           await TextatizeApi().storage.write(key: "remember", value: "true");
         }

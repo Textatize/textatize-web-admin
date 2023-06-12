@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:textatize_admin/bloc/auth/auth_bloc.dart";
 import "package:textatize_admin/bloc/home/home_bloc.dart";
+import "package:textatize_admin/ui/auth/register_screen.dart";
 import "package:textatize_admin/ui/home/home_screen.dart";
 
 class LoginScreen extends StatefulWidget {
@@ -92,19 +93,54 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: EdgeInsets.symmetric(vertical: contentPadding),
                         child: Row(
                           children: [
-                            const Text("Remember me?"),
                             Checkbox(
                               value: remember,
                               onChanged: (_) => setState(() {
                                 remember = !remember;
                               }),
                             ),
+                            const Text("Remember Me"),
                             const Spacer(),
                             ElevatedButton(
                               onPressed: () => submitForm(state),
                               child: const Text("Login"),
                             )
                           ],
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              height: .5,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(contentPadding),
+                            child: const Text("OR"),
+                          ),
+                          Expanded(
+                            child: Container(
+                              height: .5,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: contentPadding),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            child: const Text("Register"),
+                            onPressed: () => Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const RegisterScreen(),
+                              ),
+                            ),
+                          ),
                         ),
                       )
                     ],

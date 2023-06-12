@@ -8,3 +8,5 @@ class GetHome extends HomeEvent {
 
   GetHome({required this.context});
 }
+
+class ResetHome extends HomeEvent {}

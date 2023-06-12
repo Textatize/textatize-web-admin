@@ -19,7 +19,10 @@ void errorDialog(BuildContext context, String error) {
             "Error:",
             style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
           ),
-          content: Text(error.toString()),
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(error.toString()),
+          ),
           actions: [
             TextButton(
               onPressed: () {
