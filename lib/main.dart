@@ -29,11 +29,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Textatize Admin",
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch().copyWith(
-            primary: Colors.blue,
-            secondary: Colors.amber,
-            tertiary: Colors.grey,
-          ),
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromRGBO(237, 27, 36, 1)),
           useMaterial3: true,
         ),
         home: const SplashScreen(),

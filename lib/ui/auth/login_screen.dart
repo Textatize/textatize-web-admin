@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(contentPadding),
+                        padding: EdgeInsets.symmetric(vertical: contentPadding),
                         child: Image.asset(
                           "logo_large.png",
                           width: 300,
