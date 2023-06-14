@@ -25,6 +25,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool remember = false;
 
   @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    verifyController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
@@ -38,18 +46,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: const Text(
-              "Register",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
           body: Center(
-            child: Form(
-              key: _formKey,
-              child: SizedBox(
-                width: 300,
-                child: SingleChildScrollView(
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: SizedBox(
+                  width: 300,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -161,7 +163,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ElevatedButton(
                               onPressed: () => submitForm(state),
                               child: state is Authenticating
-                                  ? const CircularProgressIndicator()
+                                  ? const SizedBox(
+                                      width: 12,
+                                      height: 12,
+                                      child: CircularProgressIndicator(),
+                                    )
                                   : const Text("Register"),
                             )
                           ],

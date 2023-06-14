@@ -1,3 +1,4 @@
+import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:textatize_admin/bloc/auth/auth_bloc.dart";
@@ -21,6 +22,13 @@ class _LoginScreenState extends State<LoginScreen> {
   bool remember = false;
 
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
@@ -34,12 +42,6 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: const Text(
-              "Login",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
           body: Center(
             child: Form(
               key: _formKey,
@@ -60,6 +62,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: contentPadding),
                         child: TextFormField(
+                          validator: (_) {
+                            if (!EmailValidator.validate(
+                              emailController.text,
+                            )) {
+                              return "Not a valid email!";
+                            }
+                            return null;
+                          },
                           onFieldSubmitted: (_) => submitForm(state),
                           controller: emailController,
                           decoration: const InputDecoration(
@@ -110,7 +120,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             ElevatedButton(
                               onPressed: () => submitForm(state),
                               child: state is Authenticating
-                                  ? const CircularProgressIndicator()
+                                  ? const SizedBox(
+                                      width: 12,
+                                      height: 12,
+                                      child: CircularProgressIndicator(),
+                                    )
                                   : const Text("Login"),
                             )
                           ],
@@ -163,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void submitForm(AuthState state) {
-    if (state is! Authenticating) {
+    if (state is! Authenticating && _formKey.currentState!.validate()) {
       context.read<AuthBloc>().add(
             LoginRequested(
               email: emailController.text,
