@@ -34,6 +34,12 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       builder: (context, state) {
         return Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              "Login",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
           body: Center(
             child: Form(
               key: _formKey,
@@ -103,7 +109,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             const Spacer(),
                             ElevatedButton(
                               onPressed: () => submitForm(state),
-                              child: const Text("Login"),
+                              child: state is Authenticating
+                                  ? const CircularProgressIndicator()
+                                  : const Text("Login"),
                             )
                           ],
                         ),
