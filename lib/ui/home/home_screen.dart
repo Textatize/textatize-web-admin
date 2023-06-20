@@ -3,6 +3,9 @@ import "package:flutter_bloc/flutter_bloc.dart";
 import "package:textatize_admin/bloc/auth/auth_bloc.dart";
 import "package:textatize_admin/bloc/home/home_bloc.dart";
 import "package:textatize_admin/ui/auth/login_screen.dart";
+import "package:textatize_admin/ui/home/helpers/user_tile.dart";
+
+import "../../models/user_model.dart";
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,6 +15,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeBloc, HomeState>(
@@ -56,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: IconButton(
-                  tooltip: "Sign Out",
+                  tooltip: "Logout",
                   onPressed: () {
                     context.read<AuthBloc>().add(SignOut());
                     context.read<HomeBloc>().add(ResetHome());
@@ -72,11 +77,51 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ],
           ),
-          body: const Center(
-            child: Text(
-              "Home Screen",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
-            ),
+          body: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: searchController,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.search),
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  searchController.clear();
+                                });
+                              },
+                              icon: const Icon(Icons.clear),),
+                          labelText: "Search",
+                          hintText: "Your Query Here",
+                          border: const OutlineInputBorder(borderSide: BorderSide()),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.refresh),
+                      tooltip: "Refresh",
+                    ),
+                  )
+                ],
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: context.read<HomeBloc>().users.length,
+                  itemBuilder: (context, index) {
+                    User user = context.read<HomeBloc>().users[index];
+                    return UserTile(user);
+                  },
+                ),
+              ),
+            ],
           ),
         );
       },
