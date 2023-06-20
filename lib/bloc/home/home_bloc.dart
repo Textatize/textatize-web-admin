@@ -9,9 +9,7 @@ part "home_event.dart";
 part "home_state.dart";
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  List<User> users = [
-    User(email: "Test@email.com", uniqueId: "One", enabled: true)
-  ];
+  List<User> users = [];
 
   HomeBloc() : super(HomeUnloaded()) {
     on<GetHome>((event, emit) async {

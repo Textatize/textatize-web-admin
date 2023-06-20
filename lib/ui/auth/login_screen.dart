@@ -31,7 +31,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is Authenticated) {
+        if (state is Authenticated &&
+            context.read<HomeBloc>().state is! HomeLoading) {
           context.read<HomeBloc>().add(GetHome(context: context));
           Navigator.pushReplacement(
             context,
