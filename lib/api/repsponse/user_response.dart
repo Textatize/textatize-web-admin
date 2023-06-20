@@ -10,4 +10,12 @@ class UserResponse {
     required this.error,
     required this.user,
   });
+
+  factory UserResponse.fromJson(Map<String, dynamic> json) {
+    return UserResponse(
+      sessionToken: json["session_token"],
+      error: json["error"],
+      user: json["user"] != null ? User.fromJson(json["user"]) : null,
+    );
+  }
 }

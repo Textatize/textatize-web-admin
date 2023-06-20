@@ -57,13 +57,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: IconButton(
                   tooltip: "Sign Out",
-                    onPressed: () {
-                      context.read<AuthBloc>().add(SignOut());
-                      context.read<HomeBloc>().add(ResetHome());
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => const LoginScreen()),);
-                    },
-                    icon: const Icon(Icons.logout),),
+                  onPressed: () {
+                    context.read<AuthBloc>().add(SignOut());
+                    context.read<HomeBloc>().add(ResetHome());
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.logout),
+                ),
               )
             ],
           ),
