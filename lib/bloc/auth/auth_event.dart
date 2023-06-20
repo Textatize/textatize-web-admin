@@ -4,13 +4,13 @@ part of "auth_bloc.dart";
 abstract class AuthEvent {}
 
 class LoginRequested extends AuthEvent {
-  final String email;
+  final String username;
   final String password;
   final bool remember;
   final BuildContext context;
 
   LoginRequested({
-    required this.email,
+    required this.username,
     required this.password,
     required this.remember,
     required this.context,

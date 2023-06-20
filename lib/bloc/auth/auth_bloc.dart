@@ -12,7 +12,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<RegisterRequested>((event, emit) async {
       try {
         emit(Authenticating());
-
         if (event.remember) {
           await TextatizeApi().storage.write(key: "remember", value: "true");
         }
@@ -28,6 +27,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if (event.remember) {
           await TextatizeApi().storage.write(key: "remember", value: "true");
         }
+        await TextatizeApi().storage.write(
+              key: "token",
+              value:
+                  (await TextatizeApi().login(event.username, event.password))
+                      .sessionToken,
+            );
         emit(Authenticated());
       } catch (e) {
         errorDialog(event.context, e.toString());

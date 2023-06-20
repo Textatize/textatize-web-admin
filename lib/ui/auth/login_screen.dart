@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             const Text("Remember Me"),
                             const Spacer(),
                             Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
+                              padding: const EdgeInsets.only(right: 8.0),
                               child: ElevatedButton(
                                 onPressed: () => submitForm(state),
                                 child: state is Authenticating
@@ -148,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (state is! Authenticating && _formKey.currentState!.validate()) {
       context.read<AuthBloc>().add(
             LoginRequested(
-              email: emailController.text,
+              username: emailController.text,
               password: passwordController.text,
               remember: remember,
               context: context,
