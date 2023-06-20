@@ -1,4 +1,3 @@
-import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:textatize_admin/bloc/auth/auth_bloc.dart";
@@ -14,7 +13,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController userController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final double contentPadding = 16.0;
   bool hidePassword = true;
@@ -22,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    emailController.dispose();
+    userController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -62,19 +61,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: contentPadding),
                         child: TextFormField(
-                          validator: (_) {
-                            if (!EmailValidator.validate(
-                              emailController.text,
-                            )) {
-                              return "Not a valid email!";
-                            }
-                            return null;
-                          },
                           onFieldSubmitted: (_) => submitForm(state),
-                          controller: emailController,
+                          controller: userController,
                           decoration: const InputDecoration(
-                            labelText: "Email",
-                            hintText: "admin@textatizeapp.com",
+                            labelText: "Username",
+                            hintText: "admin",
                             border:
                                 OutlineInputBorder(borderSide: BorderSide()),
                           ),
@@ -148,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (state is! Authenticating && _formKey.currentState!.validate()) {
       context.read<AuthBloc>().add(
             LoginRequested(
-              username: emailController.text,
+              username: userController.text,
               password: passwordController.text,
               remember: remember,
               context: context,
