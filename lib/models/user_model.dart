@@ -8,12 +8,20 @@ class User {
   final int points;
   final String created;
   final String entityStatus;
-  final String createdTime;
-  final String updatedTime;
+  final int createdTime;
+  final int updatedTime;
   final String createdFormatted;
+  final bool isSuperAdmin;
+  final int numEvents;
+  final int numPhotos;
+  final bool isEmailVerified;
   bool enabled;
 
   User({
+    required this.numEvents,
+    required this.numPhotos,
+    required this.isEmailVerified,
+    required this.isSuperAdmin,
     required this.uniqueId,
     required this.email,
     required this.enabled,
@@ -31,6 +39,8 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
+      isSuperAdmin: json["isSuperAdmin"],
+      isEmailVerified: json["isEmailVerified"],
       uniqueId: json["unique_id"],
       email: json["email"],
       enabled: json["entityStatus"] == "active",
@@ -44,6 +54,8 @@ class User {
       updatedTime: json["updated_time"],
       username: json["username"],
       points: json["points"],
+      numEvents: json["numEvents"],
+      numPhotos: json["numPhotos"],
     );
   }
 }

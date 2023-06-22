@@ -2,7 +2,7 @@ import "../../models/user_model.dart";
 
 class UserResponse {
   final String sessionToken;
-  final String error;
+  final String? error;
   final User? user;
 
   UserResponse({
@@ -13,7 +13,7 @@ class UserResponse {
 
   factory UserResponse.fromJson(Map<String, dynamic> json) {
     return UserResponse(
-      sessionToken: json["session_token"],
+      sessionToken: json["sessionToken"],
       error: json["error"],
       user: json["user"] != null ? User.fromJson(json["user"]) : null,
     );

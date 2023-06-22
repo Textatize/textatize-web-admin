@@ -26,16 +26,50 @@ class TextatizeApi {
     }
   }
 
-  Future<UserResponse> register() async {
-    throw UnimplementedError();
-  }
-
   Future<UserResponse> reAuth() async {
-    throw UnimplementedError();
+    try {
+      String token = "Bearer ${(await storage.read(key: "token"))!}";
+      final response = await http.get(
+        Uri.https(
+          host,
+          "${url}user/me",
+        ),
+        headers: {
+          "Authorization": token,
+        },
+      );
+      if (jsonDecode(utf8.decode(response.bodyBytes))["error"] != null) {
+        throw jsonDecode(utf8.decode(response.bodyBytes))["error"];
+      }
+      UserResponse userResponse =
+          UserResponse.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+      return userResponse;
+    } catch (e) {
+      throw e.toString();
+    }
   }
 
-  Future<void> toggleUser(String uniqueId, bool enabled) async {
-    throw UnimplementedError();
+  Future<UserResponse> toggleUser(String uniqueId, bool enabled) async {
+    try {
+      String token = "Bearer ${(await storage.read(key: "token"))!}";
+      Map<String, dynamic> params = {
+        "userId": uniqueId,
+      };
+      final response = await http.post(
+        Uri.https(
+          host,
+          "${url}admin/user/$uniqueId/${enabled ? "disable" : "enable"}",
+        ),
+        headers: {"Authorization": token},
+        body: params,
+      );
+      if (jsonDecode(utf8.decode(response.bodyBytes))["error"] != null) {
+        throw jsonDecode(utf8.decode(response.bodyBytes))["error"];
+      }
+      return UserResponse.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> getPhoneNumbers(String uniqueId) async {
@@ -46,18 +80,42 @@ class TextatizeApi {
     throw UnimplementedError();
   }
 
-  Future<void> editSubscription(String uniqueId) async {
+  Future<void> editSubscription(
+    String uniqueId,
+  ) async {
     throw UnimplementedError();
   }
 
-  Future<UsersResponse> getAllUsers() async {
-    throw UnimplementedError();
+  Future<UsersResponse> getAllUsers(String query, int page) async {
+    try {
+      String token = "Bearer ${(await storage.read(key: "token"))!}";
+      final Map<String, dynamic> params = {
+        if (query.isNotEmpty) "query": query,
+        "page": page,
+      };
+      final response = await http.get(
+        Uri.https(
+          host,
+          "${url}user/me",
+          params,
+        ),
+        headers: {
+          "Authorization": token,
+        },
+      );
+      if (jsonDecode(utf8.decode(response.bodyBytes))["error"] != null) {
+        throw jsonDecode(utf8.decode(response.bodyBytes))["error"];
+      }
+      return UsersResponse.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes)));
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<UserResponse> getCurrentUser() async {
     try {
       String token = "Bearer ${(await storage.read(key: "token"))!}";
-
       final response = await http.get(
         Uri.https(
           host,

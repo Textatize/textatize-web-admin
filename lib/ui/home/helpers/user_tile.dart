@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:textatize_admin/ui/home/helpers/user_info_popup.dart";
 import "package:textatize_admin/ui/universal/popups/snackbar.dart";
 
+import "../../../api/api.dart";
 import "../../../models/user_model.dart";
 
 class UserTile extends StatefulWidget {
@@ -80,24 +81,30 @@ class _UserTileState extends State<UserTile> {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: IconButton(
                   onPressed: () async {
-                    if (!switchLoading) {
-                      setState(() {
-                        switchLoading = true;
-                      });
-                      // TODO: Reimplement
-                      await Future.delayed(
-                        const Duration(seconds: 1, milliseconds: 500),
-                      );
-                      // await TextatizeApi()
-                      //     .toggleUser(user.uniqueId, user.enabled);
-                      setState(() {
-                        user.enabled = !user.enabled;
-                        switchLoading = false;
-                      });
+                    try {
+                      if (!switchLoading) {
+                        setState(() {
+                          switchLoading = true;
+                        });
+                        await TextatizeApi()
+                            .toggleUser(user.uniqueId, user.enabled);
+                        setState(() {
+                          user.enabled = !user.enabled;
+                          switchLoading = false;
+                        });
+                        snackbar(
+                          context,
+                          "${user.email} ${user.enabled ? "enabled" : "disabled"}!",
+                        );
+                      }
+                    } catch (e) {
                       snackbar(
                         context,
-                        "${user.email} ${user.enabled ? "enabled" : "disabled"}!",
+                        "Unable to complete request! Error: ${e.toString()}",
                       );
+                      setState(() {
+                        switchLoading = false;
+                      });
                     }
                   },
                   icon: switchLoading

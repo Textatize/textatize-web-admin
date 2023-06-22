@@ -63,9 +63,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextFormField(
                           onFieldSubmitted: (_) => submitForm(state),
                           controller: userController,
+                          keyboardType: TextInputType.emailAddress,
                           decoration: const InputDecoration(
-                            labelText: "Username",
-                            hintText: "admin",
+                            labelText: "Email",
+                            hintText: "admin@textatize.com",
                             border:
                                 OutlineInputBorder(borderSide: BorderSide()),
                           ),
