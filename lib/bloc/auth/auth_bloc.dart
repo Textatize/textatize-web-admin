@@ -1,5 +1,5 @@
 import "package:bloc/bloc.dart";
-import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
 import "package:textatize_admin/api/api.dart";
 import "package:textatize_admin/ui/universal/popups/error_dialog.dart";
 
@@ -27,12 +27,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if (event.remember) {
           await TextatizeApi().storage.write(key: "remember", value: "true");
         }
+        // TODO: Uncomment
+        await Future.delayed(const Duration(seconds: 1, milliseconds: 500));
+        /*
         await TextatizeApi().storage.write(
               key: "token",
               value:
                   (await TextatizeApi().login(event.username, event.password))
                       .sessionToken,
             );
+
+         */
+
         emit(Authenticated());
       } catch (e) {
         errorDialog(event.context, e.toString());

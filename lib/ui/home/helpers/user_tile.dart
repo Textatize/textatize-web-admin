@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:textatize_admin/api/api.dart";
+import "package:textatize_admin/ui/home/helpers/user_info_popup.dart";
 import "package:textatize_admin/ui/universal/popups/snackbar.dart";
 
 import "../../../models/user_model.dart";
@@ -42,6 +42,19 @@ class _UserTileState extends State<UserTile> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: IconButton(
+                  tooltip: "User Info",
+                  onPressed: () async {
+                    showDialog(
+                      context: context,
+                      builder: (context) => UserInfoPopup(user),
+                    );
+                  },
+                  icon: const Icon(Icons.info),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: IconButton(
                   tooltip: "Edit Subscription",
                   onPressed: () async {},
                   icon: const Icon(Icons.auto_awesome),
@@ -71,8 +84,12 @@ class _UserTileState extends State<UserTile> {
                       setState(() {
                         switchLoading = true;
                       });
-                      await TextatizeApi()
-                          .toggleUser(user.uniqueId, user.enabled);
+                      // TODO: Reimplement
+                      await Future.delayed(
+                        const Duration(seconds: 1, milliseconds: 500),
+                      );
+                      // await TextatizeApi()
+                      //     .toggleUser(user.uniqueId, user.enabled);
                       setState(() {
                         user.enabled = !user.enabled;
                         switchLoading = false;
