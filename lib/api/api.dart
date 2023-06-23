@@ -92,7 +92,7 @@ class TextatizeApi {
       if (response.statusCode != 200) {
         throw "Unable to download file";
       }
-      if(response.bodyBytes.length == 4096) {
+      if (response.bodyBytes.length == 4096) {
         throw "No data for this user!";
       }
       final anchor = AnchorElement(
@@ -122,7 +122,7 @@ class TextatizeApi {
     try {
       String token = "Bearer ${(await storage.read(key: "token"))!}";
       final Map<String, dynamic> params = {
-        if(query.isNotEmpty) "query": query,
+        if (query.isNotEmpty) "query": query,
         "page": page.toString(),
       };
       final response = await http.get(
