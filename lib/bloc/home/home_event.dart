@@ -11,3 +11,5 @@ class GetUsers extends HomeEvent {
 }
 
 class ResetHome extends HomeEvent {}
+
+class ResetQuery extends HomeEvent {}

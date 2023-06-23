@@ -8,7 +8,7 @@ part "auth_event.dart";
 part "auth_state.dart";
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc() : super(UnAuthenticated()) {
+  AuthBloc() : super(AuthUnloaded()) {
     on<RegisterRequested>((event, emit) async {
       try {
         emit(Authenticating());
@@ -41,17 +41,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     on<CheckIfSignedIn>((event, emit) async {
-      emit(Authenticating());
       if (await TextatizeApi().storage.read(key: "token") != null &&
           await TextatizeApi().storage.read(key: "remember") != null) {
         try {
           await TextatizeApi().reAuth();
           emit(Authenticated());
-        } catch (_) {
+        } catch (e) {
+
           emit(UnAuthenticated());
         }
       }
-      emit(UnAuthenticated());
     });
 
     on<SignOut>((event, emit) async {

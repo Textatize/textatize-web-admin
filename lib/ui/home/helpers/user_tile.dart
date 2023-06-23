@@ -37,7 +37,16 @@ class _UserTileState extends State<UserTile> {
           height: 0.5,
         ),
         ListTile(
-          leading: const Icon(Icons.account_circle),
+          leading: Icon(
+            user.isSuperAdmin
+                ? Icons.shield
+                : user.isEmailVerified
+                    ? Icons.account_circle
+                    : Icons.mark_email_unread,
+            color: user.isSuperAdmin
+                ? Theme.of(context).colorScheme.primary
+                : null,
+          ),
           title: Text(user.email),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
@@ -74,7 +83,8 @@ class _UserTileState extends State<UserTile> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: IconButton(
-                  tooltip: "Download Phone Numbers",
+                  tooltip:
+                      phoneLoading ? "Downloading" : "Download Phone Numbers",
                   onPressed: () async {
                     try {
                       setState(() {
@@ -91,7 +101,7 @@ class _UserTileState extends State<UserTile> {
                       });
                       errorDialog(
                         context,
-                        "Unable to download! Error: ${e.toString()}",
+                        "Unable to download! ${e.toString()}",
                       );
                     }
                   },

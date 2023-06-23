@@ -22,35 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocConsumer<HomeBloc, HomeState>(
       listener: (context, state) {},
       builder: (context, state) {
-        if (state is! HomeLoaded) {
-          return const Scaffold(
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Loading...",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24.0,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          );
-        }
         return Scaffold(
           appBar: AppBar(
             title: const Text(
@@ -85,19 +56,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+                        onFieldSubmitted: (_) => context.read<HomeBloc>().add(
+                            GetUsers(
+                                query: searchController.text.trim(),
+                                context: context,),),
                         controller: searchController,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.search),
                           suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  searchController.clear();
-                                });
-                              },
-                              icon: const Icon(Icons.clear),),
+                            onPressed: () {
+                              setState(() {
+                                searchController.clear();
+                              });
+                              context.read<HomeBloc>().add(ResetQuery());
+                            },
+                            icon: const Icon(Icons.clear),
+                          ),
                           labelText: "Search",
                           hintText: "Your Query Here",
-                          border: const OutlineInputBorder(borderSide: BorderSide()),
+                          border: const OutlineInputBorder(
+                              borderSide: BorderSide(),),
                         ),
                       ),
                     ),
@@ -105,7 +83,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          searchController.clear();
+                        });
+                        context.read<HomeBloc>().add(ResetQuery());
+                      },
                       icon: const Icon(Icons.refresh),
                       tooltip: "Refresh",
                     ),
@@ -113,13 +96,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: context.read<HomeBloc>().users.length,
-                  itemBuilder: (context, index) {
-                    User user = context.read<HomeBloc>().users[index];
-                    return UserTile(user);
-                  },
-                ),
+                child: state is! HomeLoaded
+                    ? const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Loading...",
+                            style: TextStyle(
+                                fontSize: 24.0, fontWeight: FontWeight.bold,),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(),
+                          ),
+                        ],
+                      )
+                    : context.read<HomeBloc>().users.isEmpty
+                        ? const Center(
+                            child: Text(
+                              "No Users!",
+                              style: TextStyle(
+                                  fontSize: 24.0, fontWeight: FontWeight.bold,),
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: context.read<HomeBloc>().users.length,
+                            itemBuilder: (context, index) {
+                              User user = context.read<HomeBloc>().users[index];
+                              return UserTile(user);
+                            },
+                          ),
               ),
             ],
           ),

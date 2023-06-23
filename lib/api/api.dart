@@ -92,6 +92,9 @@ class TextatizeApi {
       if (response.statusCode != 200) {
         throw "Unable to download file";
       }
+      if(response.bodyBytes.length == 4096) {
+        throw "No data for this user!";
+      }
       final anchor = AnchorElement(
         href: Url.createObjectUrlFromBlob(
           Blob([response.bodyBytes]),
@@ -119,7 +122,7 @@ class TextatizeApi {
     try {
       String token = "Bearer ${(await storage.read(key: "token"))!}";
       final Map<String, dynamic> params = {
-        "query": "test",
+        if(query.isNotEmpty) "query": query,
         "page": page.toString(),
       };
       final response = await http.get(
@@ -132,17 +135,14 @@ class TextatizeApi {
           "Authorization": token,
         },
       );
-      print(response.request);
-      print(response.statusCode);
+
       if (jsonDecode(utf8.decode(response.bodyBytes))["error"] != null) {
         throw jsonDecode(utf8.decode(response.bodyBytes))["error"];
       }
-      print(jsonDecode(utf8.decode(response.bodyBytes)));
       return UsersResponse.fromJson(
         jsonDecode(utf8.decode(response.bodyBytes)),
       );
     } catch (e) {
-      print("Error on users: $e");
       rethrow;
     }
   }
@@ -164,7 +164,6 @@ class TextatizeApi {
       }
       return UserResponse.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } catch (e) {
-      print("Error on get current: $e");
       rethrow;
     }
   }
