@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 context: context,
                               ),
                             ),
-                        textInputAction: TextInputAction.send,
+                        textInputAction: TextInputAction.search,
                         controller: searchController,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.search),
