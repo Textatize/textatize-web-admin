@@ -4,6 +4,7 @@ import "package:textatize_admin/ui/universal/popups/snackbar.dart";
 
 import "../../../api/api.dart";
 import "../../../models/user_model.dart";
+import "../../universal/popups/error_dialog.dart";
 
 class UserTile extends StatefulWidget {
   final User user;
@@ -17,6 +18,7 @@ class UserTile extends StatefulWidget {
 class _UserTileState extends State<UserTile> {
   late User user;
   bool switchLoading = false;
+  bool phoneLoading = false;
 
   @override
   void initState() {
@@ -73,8 +75,33 @@ class _UserTileState extends State<UserTile> {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: IconButton(
                   tooltip: "Download Phone Numbers",
-                  onPressed: () async {},
-                  icon: const Icon(Icons.phone),
+                  onPressed: () async {
+                    try {
+                      setState(() {
+                        phoneLoading = true;
+                      });
+                      await TextatizeApi()
+                          .getPhoneNumbers(user.uniqueId, user.username);
+                      setState(() {
+                        phoneLoading = false;
+                      });
+                    } catch (e) {
+                      setState(() {
+                        phoneLoading = false;
+                      });
+                      errorDialog(
+                        context,
+                        "Unable to download! Error: ${e.toString()}",
+                      );
+                    }
+                  },
+                  icon: phoneLoading
+                      ? const SizedBox(
+                          width: 12,
+                          height: 12,
+                          child: CircularProgressIndicator(),
+                        )
+                      : const Icon(Icons.phone),
                 ),
               ),
               Padding(
@@ -98,7 +125,7 @@ class _UserTileState extends State<UserTile> {
                         );
                       }
                     } catch (e) {
-                      snackbar(
+                      errorDialog(
                         context,
                         "Unable to complete request! Error: ${e.toString()}",
                       );

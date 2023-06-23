@@ -1,4 +1,5 @@
 import "dart:convert";
+import "package:universal_html/html.dart";
 import "package:http/http.dart" as http;
 import "package:flutter_secure_storage/flutter_secure_storage.dart";
 import "package:textatize_admin/api/response/user_response.dart";
@@ -72,8 +73,36 @@ class TextatizeApi {
     }
   }
 
-  Future<void> getPhoneNumbers(String uniqueId) async {
-    throw UnimplementedError();
+  Future<void> getPhoneNumbers(String uniqueId, String username) async {
+    try {
+      String token = "Bearer ${(await storage.read(key: "token"))!}";
+      Map<String, dynamic> params = {
+        "userId": uniqueId,
+      };
+      final response = await http.get(
+        Uri.https(
+          host,
+          "${url}admin/export",
+          params,
+        ),
+        headers: {
+          "Authorization": token,
+        },
+      );
+      if (response.statusCode != 200) {
+        throw "Unable to download file";
+      }
+      final anchor = AnchorElement(
+        href: Url.createObjectUrlFromBlob(
+          Blob([response.bodyBytes]),
+        ),
+      );
+      anchor.download = "$username Phone Numbers.xlsx";
+      anchor.click();
+      anchor.remove();
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> getEventStats(String uniqueId) async {
@@ -90,25 +119,30 @@ class TextatizeApi {
     try {
       String token = "Bearer ${(await storage.read(key: "token"))!}";
       final Map<String, dynamic> params = {
-        if (query.isNotEmpty) "query": query,
-        "page": page,
+        "query": "test",
+        "page": page.toString(),
       };
       final response = await http.get(
         Uri.https(
           host,
-          "${url}user/me",
+          "${url}admin/users",
           params,
         ),
         headers: {
           "Authorization": token,
         },
       );
+      print(response.request);
+      print(response.statusCode);
       if (jsonDecode(utf8.decode(response.bodyBytes))["error"] != null) {
         throw jsonDecode(utf8.decode(response.bodyBytes))["error"];
       }
+      print(jsonDecode(utf8.decode(response.bodyBytes)));
       return UsersResponse.fromJson(
-          jsonDecode(utf8.decode(response.bodyBytes)));
+        jsonDecode(utf8.decode(response.bodyBytes)),
+      );
     } catch (e) {
+      print("Error on users: $e");
       rethrow;
     }
   }
@@ -130,6 +164,7 @@ class TextatizeApi {
       }
       return UserResponse.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } catch (e) {
+      print("Error on get current: $e");
       rethrow;
     }
   }

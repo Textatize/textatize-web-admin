@@ -1,7 +1,7 @@
 import "../../models/user_model.dart";
 
 class UserResponse {
-  final String sessionToken;
+  final String? sessionToken;
   final String? error;
   final User? user;
 

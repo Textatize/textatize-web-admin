@@ -13,7 +13,7 @@ class SplashScreen extends StatelessWidget {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is Authenticated) {
-          context.read<HomeBloc>().add(GetHome(context: context));
+          context.read<HomeBloc>().add(GetUsers(context: context, query: ""));
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const HomeScreen()),

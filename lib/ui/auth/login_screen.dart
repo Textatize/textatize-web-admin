@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
       listener: (context, state) {
         if (state is Authenticated &&
             context.read<HomeBloc>().state is! HomeLoading) {
-          context.read<HomeBloc>().add(GetHome(context: context));
+          context.read<HomeBloc>().add(GetUsers(context: context, query: ""));
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const HomeScreen()),
