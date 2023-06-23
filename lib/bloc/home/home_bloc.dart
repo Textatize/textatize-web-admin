@@ -64,8 +64,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
 
     on<ResetHome>((event, emit) {
-      emit(HomeUnloaded());
       users = [];
+      user;
+      page = 0;
+      previousQuery = null;
+      hasMore = true;
+      emit(HomeUnloaded());
     });
   }
 }

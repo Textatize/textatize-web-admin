@@ -1,3 +1,4 @@
+import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:textatize_admin/bloc/auth/auth_bloc.dart";
@@ -63,10 +64,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextFormField(
                           onFieldSubmitted: (_) => submitForm(state),
                           controller: userController,
+                          validator: (_) {
+                            if(!EmailValidator.validate(userController.text.trim())) {
+                              return "Please input a valid email!";
+                            }
+                            return null;
+                          },
                           keyboardType: TextInputType.emailAddress,
                           decoration: const InputDecoration(
                             labelText: "Email",
-                            hintText: "admin@textatize.com",
+                            hintText: "user@textatize.com",
                             border:
                                 OutlineInputBorder(borderSide: BorderSide()),
                           ),
@@ -76,6 +83,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: EdgeInsets.symmetric(vertical: contentPadding),
                         child: TextFormField(
                           onFieldSubmitted: (_) => submitForm(state),
+                          validator: (_) {
+                            if(passwordController.text.trim().isEmpty) {
+                              return "Please enter a password";
+                            }
+                            return null;
+                          },
                           controller: passwordController,
                           obscureText: hidePassword,
                           decoration: InputDecoration(
@@ -140,8 +153,8 @@ class _LoginScreenState extends State<LoginScreen> {
     if (state is! Authenticating && _formKey.currentState!.validate()) {
       context.read<AuthBloc>().add(
             LoginRequested(
-              username: userController.text,
-              password: passwordController.text,
+              username: userController.text.trim(),
+              password: passwordController.text.trim(),
               remember: remember,
               context: context,
             ),

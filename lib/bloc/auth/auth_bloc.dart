@@ -14,6 +14,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(Authenticating());
         if (event.remember) {
           await TextatizeApi().storage.write(key: "remember", value: "true");
+        } else {
+          if (await TextatizeApi().storage.read(
+                    key: "remember",
+                  ) !=
+              null) await TextatizeApi().storage.delete(key: "remember");
         }
         emit(Authenticated());
       } catch (e) {
@@ -47,9 +52,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await TextatizeApi().reAuth();
           emit(Authenticated());
         } catch (e) {
-
           emit(UnAuthenticated());
         }
+      } else {
+        emit(UnAuthenticated());
       }
     });
 
