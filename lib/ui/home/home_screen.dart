@@ -16,12 +16,52 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController searchController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
+  double scrollPosition = 0.0;
+  int previousItemCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    scrollController.removeListener(_scrollListener);
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
+      previousItemCount = context.read<HomeBloc>().users.length;
+      scrollPosition =
+          scrollController.position.pixels; // capture the position here
+      context.read<HomeBloc>().add(
+        GetUsers(
+          query: searchController.text,
+          context: context,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeBloc, HomeState>(
       listener: (context, state) {},
       builder: (context, state) {
+        if (state is HomeLoaded) {
+          if (previousItemCount < context.read<HomeBloc>().users.length) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              scrollController.jumpTo(scrollPosition);
+            });
+          }
+          previousItemCount = context.read<HomeBloc>().users.length;
+        }
         return Scaffold(
           appBar: AppBar(
             title: const Text(
@@ -57,9 +97,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         onFieldSubmitted: (_) => context.read<HomeBloc>().add(
-                            GetUsers(
+                              GetUsers(
                                 query: searchController.text.trim(),
-                                context: context,),),
+                                context: context,
+                              ),
+                            ),
                         controller: searchController,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.search),
@@ -75,7 +117,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           labelText: "Search",
                           hintText: "Your Query Here",
                           border: const OutlineInputBorder(
-                              borderSide: BorderSide(),),
+                            borderSide: BorderSide(),
+                          ),
                         ),
                       ),
                     ),
@@ -100,10 +143,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            "Loading...",
-                            style: TextStyle(
-                                fontSize: 24.0, fontWeight: FontWeight.bold,),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              "Loading...",
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                           Padding(
                             padding: EdgeInsets.all(8.0),
@@ -116,10 +164,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text(
                               "No Users!",
                               style: TextStyle(
-                                  fontSize: 24.0, fontWeight: FontWeight.bold,),
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           )
                         : ListView.builder(
+                            controller: scrollController,
                             itemCount: context.read<HomeBloc>().users.length,
                             itemBuilder: (context, index) {
                               User user = context.read<HomeBloc>().users[index];
