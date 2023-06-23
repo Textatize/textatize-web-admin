@@ -62,7 +62,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: contentPadding),
                         child: TextFormField(
-                          onFieldSubmitted: (_) => submitForm(state),
                           controller: userController,
                           validator: (_) {
                             if (!EmailValidator.validate(
@@ -71,6 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                             return null;
                           },
+                          textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.emailAddress,
                           decoration: const InputDecoration(
                             labelText: "Email",
