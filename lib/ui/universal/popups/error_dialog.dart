@@ -21,21 +21,25 @@ void errorDialog(BuildContext context, String error) {
             child: Text(error),
           ),
           actions: [
-            IconButton(
-              onPressed: () async {
-                await Clipboard.setData(
-                  ClipboardData(text: error),
-                );
-                snackbar(context, "Error copied to clipboard!");
-              },
-              icon: const Icon(Icons.copy),
-              tooltip: "Copy Error Message",
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("OK"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  onPressed: () async {
+                    await Clipboard.setData(
+                      ClipboardData(text: error),
+                    );
+                    snackbar(context, "Error copied to clipboard!");
+                  },
+                  child: const Text("Copy Error"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("OK"),
+                ),
+              ],
             ),
           ],
         ),

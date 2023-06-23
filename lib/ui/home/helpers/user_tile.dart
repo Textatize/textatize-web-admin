@@ -67,22 +67,6 @@ class _UserTileState extends State<UserTile> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: IconButton(
-                  tooltip: "Edit Subscription",
-                  onPressed: () async {},
-                  icon: const Icon(Icons.auto_awesome),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: IconButton(
-                  tooltip: "View Statistics",
-                  onPressed: () async {},
-                  icon: const Icon(Icons.bar_chart),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: IconButton(
                   tooltip:
                       phoneLoading ? "Downloading" : "Download Phone Numbers",
                   onPressed: () async {
