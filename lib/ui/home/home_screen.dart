@@ -41,11 +41,11 @@ class _HomeScreenState extends State<HomeScreen> {
       scrollPosition =
           scrollController.position.pixels; // capture the position here
       context.read<HomeBloc>().add(
-        GetUsers(
-          query: searchController.text,
-          context: context,
-        ),
-      );
+            GetUsers(
+              query: searchController.text,
+              context: context,
+            ),
+          );
     }
   }
 

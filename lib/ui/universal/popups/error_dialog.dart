@@ -1,11 +1,8 @@
-import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:textatize_admin/ui/universal/popups/snackbar.dart";
 
 void errorDialog(BuildContext context, String error) {
-  if (kDebugMode) {
-    print("Error Messages:");
-    print(error.toString());
-  }
   showDialog(
     context: context,
     builder: (context) {
@@ -21,15 +18,25 @@ void errorDialog(BuildContext context, String error) {
           ),
           content: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(error.toString()),
+            child: Text(error),
           ),
           actions: [
+            IconButton(
+              onPressed: () async {
+                await Clipboard.setData(
+                  ClipboardData(text: error),
+                );
+                snackbar(context, "Error copied to clipboard!");
+              },
+              icon: const Icon(Icons.copy),
+              tooltip: "Copy Error Message",
+            ),
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
               child: const Text("OK"),
-            )
+            ),
           ],
         ),
       );

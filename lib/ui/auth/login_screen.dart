@@ -65,7 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           onFieldSubmitted: (_) => submitForm(state),
                           controller: userController,
                           validator: (_) {
-                            if(!EmailValidator.validate(userController.text.trim())) {
+                            if (!EmailValidator.validate(
+                                userController.text.trim())) {
                               return "Please input a valid email!";
                             }
                             return null;
@@ -84,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextFormField(
                           onFieldSubmitted: (_) => submitForm(state),
                           validator: (_) {
-                            if(passwordController.text.trim().isEmpty) {
+                            if (passwordController.text.trim().isEmpty) {
                               return "Please enter a password";
                             }
                             return null;
