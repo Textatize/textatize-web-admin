@@ -89,18 +89,18 @@ class TextatizeApi {
           "Authorization": token,
         },
       );
+      if (response.statusCode == 204) {
+        throw "No phone data for $username";
+      }
       if (response.statusCode != 200) {
         throw "Unable to download file";
-      }
-      if (response.bodyBytes.length == 4096) {
-        throw "No data for this user!";
       }
       final anchor = AnchorElement(
         href: Url.createObjectUrlFromBlob(
           Blob([response.bodyBytes]),
         ),
       );
-      anchor.download = "$username Phone Numbers.xlsx";
+      anchor.download = "$username Phone Numbers.xls";
       anchor.click();
       anchor.remove();
     } catch (e) {
