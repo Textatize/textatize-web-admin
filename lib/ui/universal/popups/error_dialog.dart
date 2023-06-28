@@ -3,6 +3,9 @@ import "package:flutter/services.dart";
 import "package:textatize_admin/ui/universal/popups/snackbar.dart";
 
 void errorDialog(BuildContext context, String error) {
+  if (error.contains("XMLHttpRequest error")) {
+    error = "Cannot connect to server. Please check your connection!";
+  }
   showDialog(
     context: context,
     builder: (context) {
