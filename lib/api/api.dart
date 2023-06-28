@@ -89,7 +89,6 @@ class TextatizeApi {
           "Authorization": token,
         },
       );
-      print("STATUS CODE: ${response.statusCode}");
       if (response.statusCode == 204) {
         throw "No phone data for $username";
       }

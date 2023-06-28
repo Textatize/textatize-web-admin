@@ -65,7 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           controller: userController,
                           validator: (_) {
                             if (!EmailValidator.validate(
-                                userController.text.trim())) {
+                              userController.text.trim(),
+                            )) {
                               return "Please input a valid email!";
                             }
                             return null;
